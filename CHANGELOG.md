@@ -6,6 +6,8 @@ Change history for claude-code-harness.
 
 ## [Unreleased]
 
+## [4.5.1] - 2026-05-03
+
 ### Changed
 
 - Phase 58 protected-write guardrails now classify sensitive paths as deny / ask / warn instead of treating every `.claude/` path the same. Claude capability paths, editor automation settings, shell profiles, hook entrypoints, secrets, and setup metadata now have focused coverage.
@@ -3674,7 +3676,8 @@ Purpose: 自己修正ループ失敗時に「止まるだけ」から「次の�
 
 For v2.9.x and earlier, see [GitHub Releases](https://github.com/Chachamaru127/claude-code-harness/releases).
 
-[Unreleased]: https://github.com/Chachamaru127/claude-code-harness/compare/v4.5.0...HEAD
+[Unreleased]: https://github.com/Chachamaru127/claude-code-harness/compare/v4.5.1...HEAD
+[4.5.1]: https://github.com/Chachamaru127/claude-code-harness/compare/v4.5.0...v4.5.1
 [4.5.0]: https://github.com/Chachamaru127/claude-code-harness/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/Chachamaru127/claude-code-harness/compare/v4.3.3...v4.4.0
 [4.3.3]: https://github.com/Chachamaru127/claude-code-harness/compare/v4.3.2...v4.3.3
