@@ -25,6 +25,11 @@ env.local
 .claude/*
 !.claude/rules/
 !.claude/output-styles/
+!.claude/memory/
+.claude/memory/*
+!.claude/memory/archive/
+.claude/memory/archive/*
+!.claude/memory/archive/Plans-*.md
 .agents/
 .serena/
 .superset/
