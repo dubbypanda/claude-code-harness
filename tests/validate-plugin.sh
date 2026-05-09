@@ -760,6 +760,12 @@ else
     fail_test "cross-project-audit の契約テストに失敗 — 'bash tests/test-cross-project-audit.sh' で詳細確認"
 fi
 
+if bash "$PLUGIN_ROOT/tests/test-cross-project-redaction-e2e.sh" > /dev/null 2>&1; then
+    pass_test "Phase 65.3.7 e2e: 3 member group + dict + NER + Layer 3 + audit + envelope + sentinel guard が一貫して動作します (test-cross-project-redaction-e2e.sh)"
+else
+    fail_test "cross-project-redaction-e2e の契約テストに失敗 — 'bash tests/test-cross-project-redaction-e2e.sh' で詳細確認"
+fi
+
 echo ""
 echo "=========================================="
 echo "テスト結果サマリー"
