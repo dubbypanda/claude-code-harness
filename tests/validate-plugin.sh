@@ -784,6 +784,12 @@ else
     fail_test "progress-drift の契約テストに失敗 — 'bash tests/test-progress-drift.sh' で詳細確認"
 fi
 
+if bash "$PLUGIN_ROOT/tests/test-progress-past-judgments.sh" > /dev/null 2>&1; then
+    pass_test "Phase 65.4.4 過去判断 lookup が rejection_rate_pct + top_3_judgments を返し、cross-project default OFF (test-progress-past-judgments.sh)"
+else
+    fail_test "progress-past-judgments の契約テストに失敗 — 'bash tests/test-progress-past-judgments.sh' で詳細確認"
+fi
+
 echo ""
 echo "=========================================="
 echo "テスト結果サマリー"
