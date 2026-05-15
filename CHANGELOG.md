@@ -6,7 +6,25 @@ Change history for claude-code-harness.
 
 ## [Unreleased]
 
+### Added
+
+- **GitHub Actions サプライチェーン強化**: 全ワークフローのアクションを SHA ピン化し、Dependabot による週次自動更新（7日 cooldown 付き）を追加。2026年3月の Trivy-action タグ書き換え攻撃のような事例から保護されます。
+- **CodeQL ワークフロー** (`.github/workflows/codeql.yml`): Go バイナリ向けの自動脆弱性スキャンを追加。push / pull_request / 週次スケジュールで Security タブにレポート。
+- **OSSF Scorecard ワークフロー** (`.github/workflows/scorecard.yml`): リポジトリのサプライチェーン健全度を週次でスコアリング・公開。
+- **Smoke install ワークフロー** (`.github/workflows/smoke-install.yml`): Linux / macOS / Windows の3 OS マトリクスで harness バイナリのビルド・version・validate(skills/agents/all)・doctor・plugin.json/VERSION 同期を毎 PR で検証。配信先 OS 全てで動くことを担保します。
+- **actionlint ジョブ**: `validate-plugin.yml` に追加し、ワークフロー YAML 文法ミスを PR で即検出。
+- **Composite action** (`.github/actions/setup-go-harness`): Go セットアップの重複を集約し、release / validate / test-go / codeql / smoke-install から共通利用。
+- **`.github/dependabot.yml`**: github-actions / gomod / composite action ディレクトリの週次更新エントリ。
+
+### Changed
+
+- 全ワークフロー (`validate-plugin` / `release` / `benchmark` / `opencode-compat`) に `concurrency` ブロックを追加。PR を連続 push しても古い実行は自動キャンセルされ、Actions 利用時間を約 30〜50% 削減。
+- 全ワークフローに workflow-level `permissions: contents: read` を明示。`opencode-compat` は無宣言で過剰権限だった状態を最小権限に矯正し、release は job-level `contents: write` に絞り込み。
+- すべてのチェックアウトに `persist-credentials: false` を追加してトークン窃取リスクを低減し、`filter: blob:none` で部分クローン高速化。
+- `opencode-compat` の push トリガーを `branches: [main]` に制限してフォーク push の余計な実行を防止。
+
 ### Fixed
+
 - Tightened the Claude plugin archive gate so repo-local context, CI/test fixtures, alternative-client mirrors, and sandbox examples are excluded from `git archive` distribution payloads.
 - Added a local plugin inventory gate so ignored private/dev-only skills cannot sit under public `skills/` surfaces and appear via `claude --plugin-dir .`.
 - Updated OpenCode mirror generation and validation so OpenCode skills use lowercase kebab-case names and only supported skill frontmatter fields.
