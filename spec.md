@@ -267,6 +267,44 @@ Do not merge these stages:
 - Release ready means the public release path has passed preflight and the
   release artifacts are verified.
 
+## README Product Surface Contract
+
+The root README and Japanese README are public product surfaces, not internal
+closeout notes.
+
+They must lead with:
+
+- the user pain Harness solves,
+- what changes after install,
+- the fastest verified setup path,
+- the first command or first prompt,
+- the workflow Harness actually enforces,
+- the proof boundary for supported and candidate hosts,
+- links to deeper docs only after the quick path is clear.
+
+README copy must not lead with internal code names, release archaeology,
+operator-only HTML artifacts, or product-history explanations. Those may live
+in architecture docs, research docs, or changelog entries when useful.
+
+Command descriptions must explain what the command does inside in one concise
+line, so a new user understands the work being delegated without reading the
+skill source.
+
+Visual assets used by README / README_ja must follow the same claim boundary:
+
+- text-bearing images require separate English and Japanese assets,
+- generated images must use the current official Claude Harness logo tone on a
+  white background,
+- no image may imply support tiers or host parity beyond verified evidence,
+- generated prompts, source files, dimensions, and alt text must be recorded in
+  an asset manifest before release,
+- stale images that carry obsolete product names, dark hero styling, or
+  unsupported support claims must be removed or replaced.
+
+When multiple generated-image directions are plausible, README copy may ship
+without those images, but final image generation and integration require an
+explicit user approval gate for the chosen direction.
+
 ## Memory Contract
 
 When a planning or design decision is made, Harness should record why it was

@@ -1,10 +1,12 @@
+# Claude Code Harness
+
 <p align="center">
   <img src="docs/images/claude-harness-logo-with-text.png" alt="Claude Harness" width="400">
 </p>
 
 <p align="center">
   <strong>Plan. Work. Review. Ship.</strong><br>
-  <em>Turn Claude Code into a disciplined development partner.</em>
+  <em>A disciplined delivery loop for Claude Code, with bounded paths for Codex and OpenCode.</em>
 </p>
 
 <p align="center">
@@ -13,40 +15,99 @@
   <a href="docs/CLAUDE_CODE_COMPATIBILITY.md"><img src="https://img.shields.io/badge/Claude_Code-v2.1+-purple.svg" alt="Claude Code"></a>
   <img src="https://img.shields.io/badge/Skills-5_Verbs-orange.svg" alt="Skills">
   <img src="https://img.shields.io/badge/Core-Go_Native-00ADD8.svg" alt="Go Core">
-  <img src="https://img.shields.io/badge/v4.2-Hokage-FF4500.svg" alt="Hokage">
 </p>
 
 <p align="center">
   English | <a href="README_ja.md">日本語</a>
 </p>
 
-<p align="center">
-  <img src="docs/images/hokage/hokage-hero.jpg" alt="Hokage v4.0 — The Silent Blade" width="860">
-</p>
+Claude Code is powerful, but raw agent work drifts: plans live in chat, tests
+become optional, review happens too late, and release evidence gets rebuilt by
+memory. Harness turns that into one repeatable operating path.
 
----
+After install, the default changes from "ask the agent to code" to:
+
+1. write the spec and plan,
+2. implement only the approved slice,
+3. verify the result,
+4. review independently,
+5. package evidence for PR or release.
 
 ## Quickstart
 
-New users: choose your current tool, then install only through the route whose
-tier is proven. Existing users: run the migration report before cleanup.
+New users should start from the tool they already use. Existing users should
+run the migration report before cleanup or reinstall.
 
 | Path | Start |
 |---|---|
 | New user | [Tool-first onboarding](docs/onboarding/index.md) |
 | Existing user | [Migration check](docs/onboarding/migration.md) |
-| Claude Code in 30 seconds | [Install in 30 Seconds](#install-in-30-seconds) |
-| Trigger acceptance | [Skill trigger gate](docs/onboarding/skill-trigger-acceptance.md) |
+| Claude Code fast path | [Install in 30 seconds](#install-in-30-seconds) |
+| Trigger proof | [Skill trigger gate](docs/onboarding/skill-trigger-acceptance.md) |
+
+## Install in 30 Seconds
+
+```bash
+claude
+/plugin marketplace add Chachamaru127/claude-code-harness
+/plugin install claude-code-harness@claude-code-harness-marketplace
+/harness-setup
+```
+
+Next command: run `/harness-plan` with one small request.
+
+```bash
+/harness-plan Improve the README onboarding flow
+```
+
+## First 15 Minutes
+
+1. Install through your tool route.
+2. Run `/harness-setup` or the equivalent setup script.
+3. Run `/harness-plan` with a small request; Harness writes the `spec.md` and
+   `Plans.md` drafts for you to check.
+4. Approve the generated contract or reply with the correction you want.
+5. Run the smallest approved task, for example `/harness-work 1.1.1`.
+6. Run `/harness-review` and keep the verification output.
+
+Your job is not to hand-write the plan. It is to approve or correct the
+generated contract before execution continues.
 
 ## How It Works
 
-Harness adds a repeatable loop around agent work:
+Harness adds a source-of-truth loop around agent work.
 
-1. `spec.md` and `Plans.md` hold the source of truth.
-2. `/harness-plan` turns intent into acceptance criteria.
-3. `/harness-work` implements with TDD and verification.
-4. `/harness-review` separates review from implementation.
-5. `/harness-release` packages only verified evidence.
+1. You describe the outcome in normal language.
+2. `/harness-plan` drafts or updates `spec.md` and `Plans.md` with scope,
+   acceptance criteria, unknowns, and stop conditions.
+3. Harness treats those files as the source of truth. Data the agent has not
+   seen stays `unknown` instead of being silently invented.
+4. `/harness-work` implements the approved slice with TDD and verification.
+5. `/harness-review` separates review from implementation.
+6. `/harness-release` packages only verified evidence.
+
+## Commands
+
+| Command | What happens inside |
+|---------|---------------------|
+| `/harness-setup` | Installs project guidance, command surfaces, hooks, and checks so the workflow starts from one known baseline. |
+| `/harness-plan` | Turns intent into `spec.md` and `Plans.md`, including scope, acceptance criteria, dependencies, unknowns, and stop conditions. |
+| `/harness-work` | Executes one approved task or range, adds tests when required, runs verification, and keeps work inside the plan. |
+| `/harness-work all` | Runs the approved plan through implementation and review paths; use after the plan is clear and the repo baseline is known. |
+| `/harness-review` | Reviews the result separately from implementation and treats major findings as blockers. |
+| `/harness-release` | Checks release readiness, CHANGELOG/tag boundaries, and evidence packaging after implementation and review are complete. |
+| `bin/harness doctor --migration-report` | Inventories old plugin caches, Codex skills, OpenCode files, symlinks, and memory state without deleting data. |
+
+## Basic Workflow
+
+| Stage | Output | Gate |
+|-------|--------|------|
+| Investigate | Evidence and unknowns | Do not promote unobserved data into claims. |
+| Plan | `spec.md` + `Plans.md` | User approves or corrects the generated contract. |
+| Work | Code and tests | TDD required when the task says so. |
+| Review | Independent verdict | Major findings block completion. |
+| PR | Evidence pack | PR ready is not release ready. |
+| Release | Tag/release artifacts | Release preflight must pass on the release path. |
 
 ## Install By Tool
 
@@ -60,14 +121,6 @@ Harness adds a repeatable loop around agent work:
 | GitHub Copilot CLI | `candidate` | Manual profile research only. |
 | Antigravity CLI | `future/unsupported` | No end-user install route in this phase. |
 
-## First 15 Minutes
-
-1. Install through your tool route.
-2. Run `/harness-setup` or the equivalent setup script.
-3. Ask for a small plan and check `Plans.md`.
-4. Run the smallest `harness-work` slice.
-5. Run review and keep the verification output.
-
 ## Existing User Migration
 
 Run `bin/harness doctor --migration-report` before changing an existing setup.
@@ -75,516 +128,58 @@ The report inventories stale Claude plugin caches, duplicate Codex skills, old
 symlinks, OpenCode backup paths, and harness-mem state without deleting
 anything.
 
-## Advanced
+## Support Boundary
 
-Use Breezing, Codex companion review, OpenCode bootstrap, and harness-mem after
-the basic trigger path is visible. Candidate hosts stay in research docs until
-their own smoke gates pass.
+Harness can describe candidate paths, but it does not inherit support claims
+from Superpowers, Hermes Agent, or any other project. A host only moves up when
+Harness has its own bootstrap, trigger, runtime, and release evidence.
 
----
-
-## v4.2 Update — Claude Code 2.1.99-110 + Opus 4.7
-
-> **Hokage line carries forward. Full Claude Code 2.1.99-2.1.110 + Opus 4.7 integration. Plugin manifest now matches the official `plugins-reference` schema.**
-
-Anthropic shipped Opus 4.7 with literal-instruction-following semantics, plus Claude Code 2.1.105 added the `PreCompact` hook and the `monitors/monitors.json` manifest. v4.2 makes Harness fit those changes precisely:
-
-| Area | Before (v4.1) | After (v4.2) |
-|---|---|---|
-| **Long-running workers** | Could be silently compacted mid-task | `PreCompact` hook blocks compaction while a worker is active or `Plans.md` is dirty |
-| **Plugin validation** | `claude plugin validate` rejected `monitors`/`agents` blocks | Public-spec compliant: `monitors/monitors.json` + `agents/` auto-discovery |
-| **Sync regression** | `harness sync` could silently strip declared blocks (4 prior incidents) | Two-layer guard: shell idempotency test + Go struct test for phantom fields |
-| **Long sessions** | Default 5-minute prompt cache only | `bash scripts/enable-1h-cache.sh` opt-in to 1-hour TTL (CC v2.1.108) |
-| **Reviewer/Advisor effort** | `medium` / `high` | `xhigh` (CC v2.1.111, Opus 4.7) — sharper review, with `high` fallback for other models |
-| **Agent prompts** | Worked on Opus 4.6 implicit semantics | Re-tuned for Opus 4.7 literal instruction following — explicit thresholds, schemas, command names |
-| **Guardrails (R01-R13)** | Conformed to CC 2.1.98 contract | Re-conformed to CC 2.1.110 (`PermissionRequest updatedInput`, `PreToolUse additionalContext`, Bash bypass closures) — 17 new regression tests |
-
-**What you'll notice:**
-- Long-running tasks no longer get cut off mid-flight by automatic compaction
-- `claude plugin validate` runs clean on Harness for the first time since `monitors` was added
-- `harness sync` stops mysteriously deleting your `monitors`/`agents` block
-- Reviewer agent gives sharper feedback (xhigh effort) when running on Opus 4.7
-
-Update with the usual flow:
-```
-/plugin update claude-code-harness
-```
-
-For detailed Before/After in Japanese, see `CHANGELOG.md` `[4.2.0]` entry.
-
----
-
-## v4.0 "Hokage" — What's New
-
-> **Go-native engine. 25x faster hooks. Zero Node.js dependency.**
-
-Every tool call Claude makes passes through Harness hooks. In v3, each pass cost 40-60ms of bash + Node.js overhead — a subtle drag you feel across hundreds of calls per session. v4 replaces the entire stack with a single Go binary:
-
-| | v3 (bash + Node.js) | v4 "Hokage" (Go) |
-|---|---|---|
-| **PreToolUse** | 40-60ms | **10ms** |
-| **SessionStart** | 500-800ms | **10-30ms** |
-| **PostToolUse** | 20-30ms | **10ms** |
-| **Node.js** | Required (18+) | **Not needed** |
-
-**What you'll notice:**
-- The micro-pauses between tool calls disappear — Claude feels more responsive
-- No more `npm install` or Node.js version issues on setup
-- Session startup is instant (10-30ms vs almost a second)
-- Optional [harness-mem](https://github.com/Chachamaru127/harness-mem) integration: sessions remember what you worked on last time
-
-Just update the plugin — no configuration changes needed:
-```
-/plugin update claude-code-harness
-```
-
----
-
-## Hokage Core Extraction Status
-
-Claude Code Harness remains a Claude-first product. "Hokage" currently names
-the v4 Go-native runtime line, not a separate product claim.
-
-Hokage Core extraction underway: the shared workflow contract is being separated
-from host-specific adapters, while public support claims stay limited to the
-gates that are already proven. No public `Hokage Harness` spin-off is claimed
-until the Claude/Codex/OpenCode readiness gates pass.
-
-Current gate status: [Hokage Spin-Off Readiness](docs/hokage-spin-off-readiness.md).
-
----
-
-## Why Harness?
-
-Claude Code is powerful. Harness turns that raw capability into a delivery loop that is easier to trust and harder to derail.
-
-<p align="center">
-  <img src="assets/readme-visuals-en/generated/why-harness-pillars.svg" alt="What changes with Claude Harness: shared plan, runtime guardrails, and rerunnable validation" width="860">
-</p>
-
-The 5 verb skills keep setup, plan, work, review, and release on one path. The Go-native guardrail engine protects execution with sub-10ms response, and validation can be rerun when you need proof.
-
-## Compared With Popular Claude Code Harnesses
-
-What matters here is not the theoretical ceiling of Claude Code. It is what becomes the **default operating model** once you install a harness — and what happens when you pair it with [harness-mem](https://github.com/Chachamaru127/harness-mem).
-
-<p align="center">
-  <img src="assets/readme-visuals-en/generated/harness-feature-matrix.svg" alt="Comparison: Claude Harness + harness-mem vs Harness solo vs Superpowers vs cc-sdd — 10 capabilities compared" width="860">
-</p>
-
-With harness-mem, Claude Harness is the only setup where the default path is planned, guarded, reviewed, rerunnable, **and remembered across sessions**.
-
-Full notes and source links: [docs/github-harness-plugin-benchmark.md](docs/github-harness-plugin-benchmark.md)
-
-Supported baseline and latest verified snapshot: see [Claude Code Compatibility](docs/CLAUDE_CODE_COMPATIBILITY.md).
-
----
+`not_observed != absent`: missing local proof means "not proven here", not
+"impossible" and not "supported".
 
 ## Requirements
 
-- **Claude Code v2.1+** ([Install Guide](https://docs.anthropic.com/claude-code))
-  - v2.1.105+ recommended (PreCompact hook + monitors manifest)
-  - v2.1.111+ for `xhigh` effort and Opus 4.7 support
-- **Opus 4.7** (`claude-opus-4-7`) recommended for full v4.2 benefit (literal instruction following, vision 2576px, xhigh effort)
-- **No Node.js required** (v4.0 Hokage uses Go-native engine)
-
----
-
-## Who Is This For?
-
-| You Are | Harness Helps You |
-|---------|-------------------|
-| **Developer** | Ship faster with built-in QA |
-| **Freelancer** | Deliver review reports to clients |
-| **Indie Hacker** | Move fast without breaking things |
-| **VibeCoder** | Build apps with natural language |
-| **Team Lead** | Enforce standards across projects |
-
----
-
-## Start By Tool
-
-New users should start with [tool-first onboarding](docs/onboarding/index.md).
-Existing users should run the report-first [migration check](docs/onboarding/migration.md).
-It keeps the Claude-first plugin install and the Codex CLI setup route separate
-from candidate host research.
-
----
-
-## Install in 30 Seconds
-
-```bash
-# Start Claude Code in your project
-claude
-
-# Add the marketplace & install
-/plugin marketplace add Chachamaru127/claude-code-harness
-/plugin install claude-code-harness@claude-code-harness-marketplace
-
-# Initialize your project
-/harness-setup
-```
-
-That's it. Start with `/harness-plan`.
-
-### Language
-
-Harness now ships with English as the default setup language. Japanese remains
-fully supported as an explicit opt-in:
-
-```yaml
-i18n:
-  language: ja
-```
-
-You can also start a temporary Japanese setup with
-`CLAUDE_CODE_HARNESS_LANG=ja claude`. The Japanese README is
-[README_ja.md](README_ja.md).
-
----
-
-## 🪄 TL;DR: Verified Work All
-
-**Don't want to read all this?** Just type:
-
-```
-/harness-work all
-```
-
-**One command runs the full loop after plan approval.** Plan → Parallel Implementation → Review → Commit.
-
-<p align="center">
-  <img src="assets/readme-visuals-en/work-all-flow.svg" alt="/work all pipeline" width="700">
-</p>
-
-> ⚠️ **Experimental workflow**: Once you approve the plan, Claude runs to completion. Validate the success/failure contract in [docs/evidence/work-all.md](docs/evidence/work-all.md) before depending on it in production.
-
----
-
-## The 5 Verb Workflow
-
-<p align="center">
-  <img src="assets/readme-visuals-en/generated/core-loop.svg" alt="Plan → Work → Review cycle" width="560">
-</p>
-
-### 0. Setup
-
-```bash
-/harness-setup
-```
-
-Bootstraps project files, rules, and command surfaces so the rest of the loop runs against the same conventions.
-
-### 1. Plan
-
-```bash
-/harness-plan
-```
-
-> "I want a login form with email validation"
-
-Harness creates `Plans.md` with clear acceptance criteria.
-
-### 2. Work
-
-```bash
-/harness-work              # Auto-detect parallelism
-/harness-work --parallel 5 # 5 workers simultaneously
-```
-
-Each worker implements, runs a preflight self-check, and waits for an independent review verdict before completion.
-
-### Advisor Strategy
-
-Harness is starting to adopt an advisor-style execution flow.
-In plain terms, the executor keeps moving, and only asks for help when the decision is genuinely hard.
-
-- High-risk tasks can trigger one preflight consultation
-- Repeated failures can trigger a corrective consultation
-- Plateau detection can trigger one last consultation before escalation
-- Final approval still belongs to the reviewer, not the advisor
-
-The weak-supervision layer adds evidence, not authority. It records cues such
-as hollow test passes, missing reproduction, weak labels, and counterexamples
-so the next Advisor prompt can avoid repeating a known failure pattern. The
-Advisor contract remains `PLAN` / `CORRECTION` / `STOP`, and the Reviewer
-still owns the final verdict.
-
-The first rollout is in `harness-loop`, because long-running execution benefits most from "ask only when needed."
-Details: [docs/advisor-strategy.md](docs/advisor-strategy.md)
-
-<p align="center">
-  <img src="assets/readme-visuals-en/parallel-workers.svg" alt="Parallel workers" width="640">
-</p>
-
-### 3. Review
-
-```bash
-/harness-review
-```
-
-<p align="center">
-  <img src="assets/readme-visuals-en/review-perspectives.svg" alt="4-perspective review" width="640">
-</p>
-
-| Perspective | Focus |
-|-------------|-------|
-| Security | Vulnerabilities, injection, auth |
-| Performance | Bottlenecks, memory, scaling |
-| Quality | Patterns, naming, maintainability |
-| Accessibility | WCAG compliance, screen readers |
-
-### 4. Release
-
-```bash
-/harness-release
-```
-
-Packages the verified result into CHANGELOG, tag, and release handoff steps after implementation and review are complete.
-
----
-
-## Safety First
-
-<p align="center">
-  <img src="assets/readme-visuals-en/generated/safety-guardrails.svg" alt="Safety Protection System" width="640">
-</p>
-
-Harness v4 protects your codebase with a **Go-native guardrail engine** (`go/internal/guardrail/`) — 13 declarative rules (R01–R13), single binary with sub-10ms response:
-
-| Rule | Protected | Action |
-|------|-----------|--------|
-| R01 | `sudo` commands | **Deny** |
-| R02 | `.git/`, `.env`, secrets | **Deny** write |
-| R03 | Shell writes to protected files | **Deny** by default; `.env` / `.env.*` can **Ask** via TOML break-glass |
-| R04 | Writes outside project | **Ask** |
-| R05 | `rm -rf` | **Ask** |
-| R06 | `git push --force` | **Deny** |
-| R07–R09 | Mode-specific and secret-read guards | Context-aware |
-| R10 | `--no-verify`, `--no-gpg-sign` | **Deny** |
-| R11 | `git reset --hard main/master` | **Deny** |
-| R12 | Direct push to `main` / `master` | **Ask** by default (`ask` / `deny` / `allow`) |
-| R13 | Protected file edits | **Warn** |
-| Post | `it.skip`, assertion tampering | **Warning** |
-| Perm | `git status`, `git diff`, `rg`, `npm/bun/pnpm/yarn test|lint|build` | **Auto-allow** |
-
-Runtime differences between Claude Code hooks and Codex CLI gates are documented in [docs/hardening-parity.md](docs/hardening-parity.md).
-
----
-
-## 5 Verb Skills, Zero Config
-
-v4 unifies 42 skills into **5 verb skills**. Start with the verbs first, then add Breezing, Codex, or 2-agent flows only when you need them.
-
-<table>
-<tr>
-<td align="center" width="20%"><h3>/plan</h3>Ideas → Plans.md</td>
-<td align="center" width="20%"><h3>/work</h3>Parallel implementation</td>
-<td align="center" width="20%"><h3>/review</h3>4-angle code review</td>
-<td align="center" width="20%"><h3>/release</h3>Tag + GitHub Release</td>
-<td align="center" width="20%"><h3>/setup</h3>Project init & config</td>
-</tr>
-</table>
-
-<p align="center">
-  <img src="assets/readme-visuals-en/skills-ecosystem.svg" alt="Skills ecosystem" width="640">
-</p>
-
-### Key Commands
-
-| Command | What It Does | Legacy Redirect |
-|---------|--------------|-----------------|
-| `/harness-plan` | Ideas → `Plans.md` | `/plan-with-agent`, `/planning` |
-| `/harness-work` | Parallel implementation | `/work`, `/breezing`, `/impl` |
-| `/harness-work all` | Approved plan → implement → review → commit | `/work all` |
-| `/harness-review` | 4-perspective code review | `/harness-review`, `/verify` |
-| `/harness-release` | CHANGELOG, tag, GitHub Release | `/release-har`, `/handoff` |
-| `/harness-setup` | Initialize project | `/harness-init`, `/setup` |
-| `/memory` | Manage SSOT files | — |
-| `harness doctor --residue` | Detect stale references to deleted code | — |
-
----
-
-## Architecture
-
-```
-claude-code-harness/
-├── go/                # Go-native guardrail + hookhandler engine
-│   ├── cmd/harness/   #   CLI entry point (sync, doctor, validate)
-│   ├── internal/      #   guardrail / hookhandler / state / lifecycle / breezing
-│   └── pkg/           #   config / hookproto (public API)
-├── bin/               # Compiled harness binaries (darwin-arm64/amd64, linux-amd64)
-├── skills/            # 5 verb skills + extension skills (plan/execute/review/release/setup, etc.)
-├── agents/            # 3 agents (worker / reviewer / scaffolder)
-├── hooks/             # CC hook configuration (hooks.json)
-├── scripts/           # Auxiliary shell scripts
-└── templates/         # Generation templates
-```
-
----
-
-## Advanced Features
-
-### Breezing (Agent Teams)
-
-Run entire task lists with autonomous agent teams:
-
-```bash
-/harness-work breezing all                    # Plan review + parallel implementation
-/harness-work breezing --no-discuss all       # Skip plan review, go straight to coding
-```
-
-<p align="center">
-  <img src="assets/readme-visuals-en/breezing-agents.svg" alt="Breezing agent teams" width="640">
-</p>
-
-**Phase 0 (Planning Discussion)** runs by default — Planner analyzes task quality, Critic challenges the plan, then you approve before coding starts. 8+ tasks auto-split into manageable batches.
-
-### Session Memory (harness-mem)
-
-Harness treats [harness-mem](https://github.com/Chachamaru127/harness-mem) as a managed companion. On plugin `Setup:init`, Harness can set up harness-mem automatically for Claude Code and Codex; normal `SessionStart` hooks only use the existing wiring and never run setup.
-
-- **Without harness-mem**: events are logged locally to `.claude/state/memory-bridge-events.jsonl` (no external dependency)
-- **With harness-mem**: events are also sent to the memory server for cross-session search and retrieval
-- **Weak-supervision events**: elicitation and review signals are appended to `.claude/state/elicitation/events.jsonl`; when harness-mem is healthy, they are forwarded as `elicitation_event` records without reading harness-mem's database
-
-Useful controls:
-
-```bash
-harness mem status
-harness mem setup
-harness mem doctor --json
-harness mem off
-harness mem purge --confirm-purge
-```
-
-Auto setup is on by default and can be disabled with `CLAUDE_CODE_HARNESS_MEM_AUTO_SETUP=0`. Local memory stays in harness-mem's standard local paths (`~/.harness-mem/runtime/harness-mem` and `~/.harness-mem/harness-mem.db`). `purge` always requires explicit confirmation.
-
-<details>
-<summary><strong>Codex Engine</strong></summary>
-
-Delegate implementation tasks to OpenAI Codex in parallel. Codex implements, self-reviews, and reports back.
-
-```bash
-/harness-work --codex implement these 5 API endpoints
-/harness-review --codex  # 4 perspectives + Codex second opinion
-```
-
-> **Setup**: Install [Codex CLI](https://github.com/openai/codex) and configure API key. Or run `./scripts/setup-codex.sh --user` to use Harness skills inside Codex CLI directly.
-
-</details>
-
-<details>
-<summary><strong>2-Agent Mode (with Cursor)</strong></summary>
-
-Use Cursor as PM, Claude Code as implementer. Plans.md syncs between both.
-This is handoff integration only; Cursor adapter support remains a candidate
-until Cursor-specific bootstrap and workflow smoke pass.
-
-```bash
-/harness-release handoff  # Report to Cursor PM
-```
-
-</details>
-
-<details>
-<summary><strong>Content Generation (Slides & Video)</strong></summary>
-
-```bash
-/generate-slide   # 3 visual patterns, quality scoring, auto-export
-/generate-video   # JSON Schema-driven pipeline with Remotion
-```
-
-> **Dependencies**: Slides need `GOOGLE_AI_API_KEY`. Video needs [Remotion](https://www.remotion.dev/) + ffmpeg.
-
-</details>
-
----
-
-## Why Harness vs Skill-Pack Only?
-
-Skill packs can teach a prompt. Harness also enforces behavior at runtime.
-
-- **Guardrail engine** blocks destructive writes, secret exposure, and force-push patterns on the actual execution path.
-- **Hooks + review flow** keep quality checks close to the tools that edit your repo.
-- **Validation scripts + evidence pack** give you a rerunnable way to confirm docs, packaging, and `/harness-work all` behavior.
-
----
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Command not found | Run `/harness-setup` first |
-| `harness-*` commands missing on Windows | Update or reinstall the plugin. Public command skills now ship as real directories, so `core.symlinks=false` no longer hides them. |
-| Breezing falls back to Solo mode on Windows | Update to a build that includes `bin/harness-windows-amd64.exe`. Git Bash/MSYS/Cygwin now resolve that binary automatically; WSL2 users continue to use the Linux binary. |
-| Plugin not loading | Clear cache: `rm -rf ~/.claude/plugins/cache/claude-code-harness-marketplace/` and restart |
-| Hooks not working | Run `bin/harness doctor` to diagnose (Go binary, no Node.js needed) |
-| Stale v3 references after migration | Run `bin/harness doctor --residue` — auto-detects leftover references to deleted code |
-
-For more help, [open an issue](https://github.com/Chachamaru127/claude-code-harness/issues).
-
----
-
-## Uninstall
-
-```bash
-/plugin uninstall claude-code-harness
-```
-
-Project files (Plans.md, SSOT files) remain unchanged.
-
----
-
-## Claude Code Feature Highlights
-
-Harness leverages the latest Claude Code features automatically. Here are the ones you'll notice:
-
-| What You Get | How It Works |
-|-------------|-------------|
-| **Parallel safe writes** | Worktree isolation lets multiple workers edit the same file |
-| **Smart effort scaling** | Complex tasks auto-trigger ultrathink mode |
-| **Auto-escalation** | 3 consecutive tool failures trigger recovery |
-| **LLM quality guards** | Agent hooks run security and quality checks on every edit |
-| **Team monitoring** | Breezing auto-detects when workers finish or idle |
-| **Model flexibility** | Use any provider (Bedrock, Vertex, etc.) via `modelOverrides` |
-
-Full technical list (19 features): [docs/CLAUDE-feature-table.md](docs/CLAUDE-feature-table.md)
-
----
+- Claude Code v2.1+ for the supported Claude path.
+- A project repository with write access for local setup.
+- No Node.js is required for the Go-native guardrail engine.
+- Optional [harness-mem](https://github.com/Chachamaru127/harness-mem) for
+  cross-session memory when configured and healthy.
+
+## Advanced
+
+Use these after the basic trigger path is visible.
+
+| Capability | What it adds | Boundary |
+|------------|--------------|----------|
+| Breezing | Planner/Critic/Worker style team execution for larger task lists. | Still gated by plan quality and review. |
+| Codex companion review | Schema-backed Codex second opinion through `scripts/codex-companion.sh`. | Raw `codex exec` is not the Harness companion path. |
+| OpenCode bootstrap | Mirrors Harness guidance into OpenCode-compatible surfaces. | Real runtime parity is not claimed. |
+| harness-mem | Project-scoped memory and recall across sessions. | Optional companion; purge remains explicit. |
 
 ## Documentation
 
 | Resource | Description |
 |----------|-------------|
-| [Changelog](CHANGELOG.md) | Version history |
-| [Claude Code Compatibility](docs/CLAUDE_CODE_COMPATIBILITY.md) | Requirements |
-| [Distribution Scope](docs/distribution-scope.md) | Included vs compatibility vs development-only paths |
-| [Work All Evidence Pack](docs/evidence/work-all.md) | Success/failure verification contract |
-| [Cursor Integration](docs/CURSOR_INTEGRATION.md) | 2-Agent setup |
-| [Benchmark Rubric](docs/benchmark-rubric.md) | Static vs executed evidence scoring |
-| [Weak-Supervision Harness](docs/sandbagging-aware-weak-supervision.md) | Schemas, privacy tags, and evidence flow for sandbagging-aware review |
-| [Positioning Notes](docs/positioning-notes.md) | Public-facing differentiation language |
-| [Hokage Spin-Off Readiness](docs/hokage-spin-off-readiness.md) | Conservative gate status for Hokage Core extraction |
-| [Content Layout](docs/content-layout.md) | Source docs vs generated outputs convention |
-
----
+| [Tool-first onboarding](docs/onboarding/index.md) | Where to start by host tool. |
+| [Install routes](docs/onboarding/install.md) | Per-tool setup and support-tier boundaries. |
+| [Migration check](docs/onboarding/migration.md) | Existing-user impact, compatibility, and rollback path. |
+| [Skill trigger gate](docs/onboarding/skill-trigger-acceptance.md) | How install success is verified. |
+| [Capability matrix](docs/tool-capability-matrix.md) | Supported, internal-compatible, candidate, and unsupported host claims. |
+| [Claude Code Compatibility](docs/CLAUDE_CODE_COMPATIBILITY.md) | Current Claude Code requirements and compatibility notes. |
+| [Distribution Scope](docs/distribution-scope.md) | Included vs compatibility vs development-only paths. |
+| [Hardening parity](docs/hardening-parity.md) | Runtime safety differences between Claude hooks and Codex gates. |
+| [Work All Evidence Pack](docs/evidence/work-all.md) | Success/failure verification contract for full-plan execution. |
+| [Changelog](CHANGELOG.md) | User-facing version history. |
 
 ## Contributing
 
 Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
----
-
 ## Acknowledgments
 
-- [AI Masao](https://note.com/masa_wunder) — Hierarchical skill design
-- [Beagle](https://github.com/beagleworks) — Test tampering prevention patterns
-
----
+- [AI Masao](https://note.com/masa_wunder) - Hierarchical skill design
+- [Beagle](https://github.com/beagleworks) - Test tampering prevention patterns
 
 ## License
 
-**MIT License** — Free to use, modify, commercialize.
-
-[English](LICENSE.md) | [日本語](LICENSE.ja.md)
+MIT License. See [LICENSE.md](LICENSE.md).
