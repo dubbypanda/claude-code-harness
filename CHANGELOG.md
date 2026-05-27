@@ -6,6 +6,10 @@ Change history for claude-code-harness.
 
 ## [Unreleased]
 
+### Fixed
+
+- Updated `harness-release` so a release is only complete after the release work is merged to the default branch and tags/GitHub Release are created from that branch-reachable commit.
+
 ## [4.12.9] - 2026-05-28
 
 ### Changed
