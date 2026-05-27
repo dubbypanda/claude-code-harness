@@ -6,6 +6,12 @@ Change history for claude-code-harness.
 
 ## [Unreleased]
 
+### Fixed
+
+- Added a CCH branch-protection release preflight guard so GitHub human-review
+  enforcement cannot silently replace the intended `harness-review` / Codex
+  companion approval gate.
+
 ## [4.12.6] - 2026-05-27
 
 ### Changed

@@ -987,6 +987,12 @@ else
     fail_test "harness-release governance contract failed — 'bash tests/test-harness-release-governance.sh' で詳細確認"
 fi
 
+if bash "$PLUGIN_ROOT/tests/test-cch-branch-protection-policy.sh" > /dev/null 2>&1; then
+    pass_test "CCH branch protection policy は harness-review gate と required checks を固定します"
+else
+    fail_test "CCH branch protection policy contract failed — 'bash tests/test-cch-branch-protection-policy.sh' で詳細確認"
+fi
+
 echo ""
 echo "15. Phase 69 (CC 2.1.133-2.1.142) terminalSequence / hooks 契約"
 echo "----------------------------------------"
