@@ -6,6 +6,17 @@ Change history for claude-code-harness.
 
 ## [Unreleased]
 
+### Changed
+
+- **Phase 81 Cursor CCH Adapter (candidate)**: Added Cursor adapter evidence
+  (`docs/research/cursor-adapter-candidate.md`), contract updates in
+  `spec.md`, capability matrix, and bootstrap routing contract, adapter skeleton
+  (`.cursor-plugin/`, `.cursor/AGENTS.md`, agents, hooks, MCP config shape),
+  Breezing Cursor mapping docs, `scripts/model-routing.sh --host cursor`, advisor
+  model alignment to Opus 4.7, and `tests/test-cursor-adapter-candidate.sh`.
+  Cursor remains `candidate`; no public supported Cursor adapter claim until
+  workflow smoke passes.
+
 ## [4.12.10] - 2026-05-28
 
 ### Fixed

@@ -16,6 +16,7 @@ CANONICAL_PRIORITY = [
     "package.json",
     ".claude-plugin/plugin.json",
     ".codex-plugin/plugin.json",
+    ".cursor-plugin/plugin.json",
 ]
 
 
@@ -179,6 +180,14 @@ def collect_surfaces(root: Path) -> list[Surface]:
         root,
         ".codex-plugin/plugin.json",
         ".codex-plugin/plugin.json",
+        "/version",
+        required_when_file_exists=True,
+    )
+    add_json_version_surface(
+        surfaces,
+        root,
+        ".cursor-plugin/plugin.json",
+        ".cursor-plugin/plugin.json",
         "/version",
         required_when_file_exists=True,
     )
