@@ -316,6 +316,7 @@ test_preflight_pass_and_fail() {
   HARNESS_RELEASE_PROJECT_ROOT="$repo" \
   HARNESS_RELEASE_HEALTHCHECK_CMD='true' \
   HARNESS_RELEASE_CI_STATUS_CMD='true' \
+  HARNESS_RELEASE_BRANCH_PROTECTION_CMD='true' \
     "$PROJECT_ROOT/scripts/release-preflight.sh" --check-adapters >"$success_output"
 
   assert_contains "$success_output" "\\[PASS\\] working tree clean"
@@ -329,6 +330,7 @@ test_preflight_pass_and_fail() {
   assert_contains "$success_output" "\\[PASS\\] opencode mirror validation"
   assert_contains "$success_output" "\\[PASS\\] skill mirror sync check"
   assert_contains "$success_output" "\\[PASS\\] release mirror drift"
+  assert_contains "$success_output" "\\[PASS\\] CCH branch protection policy"
   assert_contains "$success_output" "\\[PASS\\] codex plugin adapter smoke"
   assert_contains "$success_output" "\\[PASS\\] opencode bootstrap smoke"
   assert_contains "$success_output" "\\[PASS\\] bootstrap skill trigger acceptance gate"
@@ -339,6 +341,7 @@ test_preflight_pass_and_fail() {
   if HARNESS_RELEASE_PROJECT_ROOT="$repo" \
     HARNESS_RELEASE_HEALTHCHECK_CMD='true' \
     HARNESS_RELEASE_CI_STATUS_CMD='true' \
+    HARNESS_RELEASE_BRANCH_PROTECTION_CMD='true' \
       "$PROJECT_ROOT/scripts/release-preflight.sh" --check-adapters >"$failure_output" 2>&1; then
     fail "preflight should fail on dirty tree"
   fi
@@ -352,6 +355,7 @@ test_preflight_pass_and_fail() {
   if HARNESS_RELEASE_PROJECT_ROOT="$invalid_repo" \
     HARNESS_RELEASE_HEALTHCHECK_CMD='true' \
     HARNESS_RELEASE_CI_STATUS_CMD='true' \
+    HARNESS_RELEASE_BRANCH_PROTECTION_CMD='true' \
       "$PROJECT_ROOT/scripts/release-preflight.sh" >"$schema_failure_output" 2>&1; then
     fail "preflight should fail on invalid sprint-contract schema"
   fi
@@ -368,6 +372,7 @@ test_preflight_fails_on_opencode_mirror_drift() {
   if HARNESS_RELEASE_PROJECT_ROOT="$repo" \
     HARNESS_RELEASE_HEALTHCHECK_CMD='true' \
     HARNESS_RELEASE_CI_STATUS_CMD='true' \
+    HARNESS_RELEASE_BRANCH_PROTECTION_CMD='true' \
       "$PROJECT_ROOT/scripts/release-preflight.sh" --check-adapters >"$output" 2>&1; then
     fail "preflight should fail on generated opencode mirror drift"
   fi
@@ -419,6 +424,7 @@ EOF
   HARNESS_RELEASE_PROJECT_ROOT="$repo" \
   HARNESS_RELEASE_HEALTHCHECK_CMD='true' \
   HARNESS_RELEASE_CI_STATUS_CMD='true' \
+  HARNESS_RELEASE_BRANCH_PROTECTION_CMD='true' \
     "$PROJECT_ROOT/scripts/release-preflight.sh" >"$success_output"
 
   assert_contains "$success_output" "\\[PASS\\] release version sync"
@@ -440,6 +446,7 @@ PY
   if HARNESS_RELEASE_PROJECT_ROOT="$repo" \
     HARNESS_RELEASE_HEALTHCHECK_CMD='true' \
     HARNESS_RELEASE_CI_STATUS_CMD='true' \
+    HARNESS_RELEASE_BRANCH_PROTECTION_CMD='true' \
       "$PROJECT_ROOT/scripts/release-preflight.sh" >"$failure_output" 2>&1; then
     fail "preflight should fail on plugin marketplace version mismatch"
   fi
@@ -460,6 +467,7 @@ test_preflight_warns_when_env_is_managed_elsewhere() {
   HARNESS_RELEASE_PROJECT_ROOT="$repo" \
   HARNESS_RELEASE_HEALTHCHECK_CMD='true' \
   HARNESS_RELEASE_CI_STATUS_CMD='true' \
+  HARNESS_RELEASE_BRANCH_PROTECTION_CMD='true' \
     "$PROJECT_ROOT/scripts/release-preflight.sh" >"$output"
 
   assert_contains "$output" "\\[WARN\\] .env missing for .env.example"

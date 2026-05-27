@@ -189,6 +189,28 @@ check_release_version_sync() {
   rm -f "$output_file"
 }
 
+check_cch_branch_protection_policy() {
+  if [ -n "${HARNESS_RELEASE_BRANCH_PROTECTION_CMD:-}" ]; then
+    run_optional_command "CCH branch protection policy" "$HARNESS_RELEASE_BRANCH_PROTECTION_CMD"
+    return
+  fi
+
+  if [ ! -x scripts/check-cch-branch-protection-policy.sh ]; then
+    warn "CCH branch protection policy skipped"
+    return
+  fi
+
+  local output_file
+  output_file="$(mktemp)"
+  if bash scripts/check-cch-branch-protection-policy.sh >"$output_file" 2>&1; then
+    pass "CCH branch protection policy"
+  else
+    fail "CCH branch protection policy"
+    sed 's/^/  /' "$output_file"
+  fi
+  rm -f "$output_file"
+}
+
 check_env_and_healthcheck() {
   local env_ok=1
 
@@ -730,6 +752,7 @@ echo "----------------------------------------"
 check_git_clean
 check_changelog
 check_release_version_sync
+check_cch_branch_protection_policy
 check_env_and_healthcheck
 check_runtime_residuals
 check_sprint_contract_schema

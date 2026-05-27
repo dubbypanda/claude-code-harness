@@ -6,6 +6,11 @@ Change history for claude-code-harness.
 
 ## [Unreleased]
 
+### Fixed
+
+- Added a CCH branch-protection release preflight guard so repository review
+  settings cannot silently drift from the intended CCH review gate.
+
 ## [4.12.6] - 2026-05-27
 
 ### Changed
