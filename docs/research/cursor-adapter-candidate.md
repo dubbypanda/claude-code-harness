@@ -194,6 +194,35 @@ equals Codex `workspace-write`):
 4. Worktree (dedicated `.git`) + Lead diff review + cherry-pick remain mandatory
    regardless, because cursor-agent self-confinement cannot be relied on.
 
+### Official security model (cursor.com/docs/agent/security, observed 2026-05-29)
+
+Cursor's own security docs confirm and refine the spike findings:
+
+- **"No traditional sandbox."** File writes are auto-approved and have **"no
+  confinement to project folder"** — exactly matching the 83.3a-follow-up result.
+  cursor-agent's `--sandbox` confines shell *commands*, not the file-edit tool.
+- **Command controls live in `~/.cursor/permissions.json`** with three levels:
+  `Ask Every Time` (default), `Allowlist` / **`Allowlist (with Sandbox)`**
+  (pre-approved commands auto-run, sandboxed), and `Run Everything`
+  (Cursor's docs say **"Never use"** — this is the `--force`/`--yolo` equivalent).
+- **`.cursorignore`** blocks the agent from *reading* listed files (e.g. secrets) —
+  an exfiltration control to add to the governance rule.
+- **Network default**: agents cannot make arbitrary requests; only GitHub, direct
+  link retrieval, and web-search providers are permitted, with no documented
+  expansion allowlist.
+- **Workspace trust**: `"security.workspace.trust.enabled": true` enables a
+  restricted mode for untrusted repos.
+
+Design consequences (supersede the `--force` recommendation):
+
+1. Do **not** drive cursor-agent with `--force` / Run Everything (Cursor says
+   never). Prefer `~/.cursor/permissions.json` `Allowlist (with Sandbox)` so only
+   curated commands auto-run; `--mode ask` for read-only delegation.
+2. Write confinement cannot come from Cursor; it comes from a dedicated-`.git`
+   worktree + the CC outer sandbox / OS + Lead review (Phase 83.3b).
+3. Add a recommended `.cursorignore` (secrets, `.env`, keys, `.git`) so the
+   network-enabled agent cannot read secrets to exfiltrate.
+
 ## Promotion Conditions
 
 Cursor can move beyond `candidate` only after all of the following in the same
