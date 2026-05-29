@@ -123,6 +123,7 @@ mask_args() {
 # テストから source されたときは関数定義の load だけで main を実行しない。
 # 本番実行（直接 invoke）では CURSOR_COMPANION_SOURCED_FOR_TEST は未設定なので素通り。
 if [ "${CURSOR_COMPANION_SOURCED_FOR_TEST:-0}" = "1" ]; then
+  # shellcheck disable=SC2317  # sourced 経路は静的解析で「unreachable」と誤検知される（意図的な dual path）
   return 0 2>/dev/null || exit 0
 fi
 
